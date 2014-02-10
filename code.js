@@ -73,6 +73,9 @@ var a3 = function() {
         var labelRadius = outerRadius + 50;
         var innerRadius = outerRadius - 24;
 
+        var current_matrix;
+        var current_color;
+
         var labels = {
             num: ['1', '2', '3', '4', '5', '6', '7'],
             rel: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'viiº'],
@@ -93,12 +96,23 @@ var a3 = function() {
             .radius(innerRadius);
         var formatPercent = d3.format(".1%");
 
+        var svg;
+
+        // computes which chords should be mapped to which colors (used for color blending)
+        self.target_color_mapping_of = function(matrix) {
+            return _.map(matrix, function(row, ri) {
+                return _.map(row, function(c, ci) {
+                    return color_scale(matrix[ri][ci] > matrix[ci][ri] ? ri : ci);
+                });
+            })
+        };
+
         self.init = function() {
             // grab the svg
 
             var matrix = test_matrix();
 
-            var svg = d3.select("#svg")
+            svg = d3.select("#svg")
                 .attr("width", width)
                 .attr("height", height)
             .append("g")
@@ -146,7 +160,19 @@ var a3 = function() {
                 .text(function(d, i) { return labels.num[i]; });
         }
 
-        self.draw = function(matrix) {
+        self.hide = function() {
+            svg.style('visibility', 'hidden');
+        };
+
+        self.is_hidden = function() {
+            return svg.style('visibility') === 'hidden';
+        };
+
+        self.draw = function(matrix, color_mapping) {
+            svg.style('visibility', '');
+            current_matrix = matrix;
+            current_color = color_mapping;
+
             var chord = d3.layout.chord()
                 .padding(chord_padding)
                 .matrix(matrix);
@@ -158,7 +184,9 @@ var a3 = function() {
 
             c
                 .attr("d", path)
-                .style("fill", function(d) { return color_scale(d.source.index); });
+                .style("fill", function(d) {
+                    return color_mapping[d.source.index][d.target.index];
+                });
 
             c.select("title")
                 .text(function(d) {
@@ -186,7 +214,10 @@ var a3 = function() {
             g_labels.selectAll("text")
                 .data(chord.groups)
                 .attr("transform", function(d) { return "translate(" + label_arc.centroid(d) + ")"; });
-        }
+        };
+
+        self.get_current_matrix = function() { return current_matrix; };
+        self.get_current_color = function() { return current_color; };
 
         return self;
 
@@ -198,7 +229,7 @@ var a3 = function() {
         var transition_time = 1000;
         var start_time = 0;
         var total_elapsed = 0;
-        var tickfn;
+        var tickfn = null;
         var is_running = false;
 
         function ontick(elapsed) {
@@ -229,6 +260,10 @@ var a3 = function() {
             }
         }
 
+        self.stop = function() {
+            tickfn = null;
+        }
+
         return self;
     }();
 
@@ -238,7 +273,7 @@ var a3 = function() {
         var ease = d3.ease('cubic-in-out');
 
         // matrix interpolation
-        function interpolate(mA, mB, s) {
+        function interpolate_matrix(mA, mB, s) {
             var m3 = test_matrix();
             for (i = 0; i < mA.length; ++i) {
                 rowA = mA[i];
@@ -250,10 +285,22 @@ var a3 = function() {
             return m3;
         }
 
+        function interpolate_color(mA, mB, s) {
+            return _.map(mA, function(row, ri) {
+                return _.map(row, function(c, ci) {
+                    return d3.interpolate(mA[ri][ci], mB[ri][ci])(s);
+                });
+            });
+        }
+
         // staged animation (first color->gray, then old->new value, then gray->color)
-        self.animate = function(prev_matrix, cur_matrix) {
+        self.animate = function(prev_matrix, cur_matrix, prev_color) {
+            var end_color = renderer.target_color_mapping_of(cur_matrix);
             animator.start(function(t) {
-                renderer.draw(interpolate(prev_matrix, cur_matrix, ease(t)));
+                renderer.draw(
+                    interpolate_matrix(prev_matrix, cur_matrix, ease(t)),
+                    interpolate_color(prev_color, end_color, ease(t))
+                );
             });
         }
 
@@ -325,15 +372,24 @@ var a3 = function() {
         // (see README for details)
         function query(attr, val) {
             matches = filterByAttr(attr, val, json_data);
-            new_matrix = compute_matrix(matches);
-            if (is_different(new_matrix, cur_matrix)) {
-                prev_matrix = cur_matrix;
-                cur_matrix = new_matrix;
-                animations.animate(prev_matrix, cur_matrix);
+
+            if (_.size(matches) > 0) {
+
+                var new_matrix = compute_matrix(matches);
+
+                if (renderer.is_hidden()) {
+                    renderer.draw(new_matrix, renderer.target_color_mapping_of(new_matrix));
+                } else if (is_different(new_matrix, cur_matrix)) {
+                    cur_matrix = new_matrix;
+                    animations.animate(renderer.get_current_matrix(), new_matrix, renderer.get_current_color());
+                }
+
+            } else {
+                renderer.hide();
+                animator.stop();
             }
+
             update_song_panel(matches);
-            // non-animated version:
-            // renderer.draw(compute_matrix(matches));
         }
 
 
@@ -364,7 +420,8 @@ var a3 = function() {
                 json_data = json;
                 renderer.init();
                 cur_matrix = compute_matrix(json.root);
-                renderer.draw(cur_matrix);
+                renderer.draw(cur_matrix, renderer.target_color_mapping_of(cur_matrix));
+                update_song_panel(json.root);
             });
 
         });
