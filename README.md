@@ -6,6 +6,8 @@ Brief Description
 
 Our site visualizes aggregate data of chord progression in songs, showing the relative fequencies of various chord transitions for a set of songs. The interface allows the user to filter by chord subsequence, artist, and title. It provides links to visualizations of the chord progressions of individual songs, as well as interactions for looking at the individual data points by hovering over elements of the visuzliation.
 
+The application is just static web content. However, it downloads a json file via AJAX, so it must be run from a webserver due to security limitations in browsers. The [github.io page](http://cse512-14w.github.io/a3-edbutler-piscean/) works, or you can self host with something like `python3 -m http.server <port>`.
+
 Part 1 Plan and Storyboard
 ----------
 
