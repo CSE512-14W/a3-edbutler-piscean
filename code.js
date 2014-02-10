@@ -330,10 +330,13 @@ var a3 = function() {
 
         // filtering (subsequence, not prefix search)
         function filterByAttr(attr, val, data) {
-            var matches = []
-            var value = String(val).toLowerCase()
-            _.each(data.root, function(d) {
-                var attrib = String(d[attr]).toLowerCase()
+            if (val === "") {
+                return data;
+            }
+            var matches = [];
+            var value = String(val).toLowerCase();
+            _.each(data, function(d) {
+                var attrib = String(d[attr]).toLowerCase();
                 if (attrib.indexOf(value) !== -1) {
                     matches.push(d);
                 }
@@ -370,8 +373,10 @@ var a3 = function() {
         // quick-and-dirty sample querying code
         // NOTE: must use songs2.json, because it is now a different format
         // (see README for details)
-        function query(attr, val) {
-            matches = filterByAttr(attr, val, json_data);
+        function query(progVal, artistVal, titleval) {
+            var mP = filterByAttr('prog', progVal, json_data.root);
+            var mA = filterByAttr('artist', artistVal, mP);
+            var matches = filterByAttr('title', titleval, mA);
 
             if (_.size(matches) > 0) {
 
@@ -394,26 +399,19 @@ var a3 = function() {
 
 
         $(function() {
+            var queryAll = function() {
+                query($('#progQ').val(),
+                      $('#artistQ').val(),
+                      $('#titleQ').val());
+            };
 
-            // add button event listeners
-            $('#progQ').change(function() {
-                query('prog', $('#progQ').val());
-            });
-            $('#progQ').keyup(function() {
-                query('prog', $('#progQ').val());
-            });
-            $('#artistB').click(function() {
-                query('artist', $('#artistQ').val());
-            });
-            $('#artistQ').keyup(function() {
-                query('artist', $('#artistQ').val());
-            });
-            $('#titleB').click(function() {
-                query('title', $('#titleQ').val());
-            });
-            $('#titleQ').keyup(function() {
-                query('title', $('#titleQ').val());
-            });
+            // add event listeners
+            $('#progQ').change(queryAll);
+            $('#progQ').keyup(queryAll);
+            $('#artistQ').change(queryAll);
+            $('#artistQ').keyup(queryAll);
+            $('#titleQ').change(queryAll);
+            $('#titleQ').keyup(queryAll);
 
             // download the data and create initial viz
             d3.json("songs.json", function(json) {

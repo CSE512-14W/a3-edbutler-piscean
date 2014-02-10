@@ -13,13 +13,22 @@
   <body>
     <svg id="svg"></svg>
     <div id="controls">
-      <p>Search by Artist: <input type="text" id="artistQ" value=""></input></p>
-      <p>Search by Title: <input type="text" id="titleQ" value=""></input></p>
-      <p>Search by Chord Progression: <input type="text" id="progQ" value=""></input></p>
+      <p>Search by Artist: <input type="text" id="artistQ" value=""></p>
+      <p>Search by Title: <input type="text" id="titleQ" value=""></p>
+      <p>Search by Chord Progression: <input type="text" id="progQ" value=""></p>
       <p id="song-count"></p>
       <div id="song-list-div">
         <ul id="songs"></ul>
       </div>
+    </div>
+    <div id="explanation">
+      <p>Music consists of melody (typically, the words being sung) and chords (the guitar and/or keyboards playing in the background). As a song plays, the sequence of chords played is called its &ldquo;chord progression&rdquo;.
+      <p>This visualization shows the chord progressions for several popular songs on a chord diagram.
+      For instance, If a song has a chord progression (in its verse, chorus, etc) that goes from the tonic (1 chord) to the dominant (5 chord), then there is an arc from the &ldquo;1&rdquo; group to the &ldquo;2&rdquo;group in the above diagram. The total number of such transitions is shown in the above diagram.
+      <p>You can filter the results by typing in the
+      &ldquo;Chord Progression&rdquo; (try  &ldquo; 145 &rdquo;),
+      &ldquo;Artist&rdquo; (try  &ldquo; gaga &rdquo;),
+      and &ldquo;Title&rdquo; (try  &ldquo; Love &rdquo;)  boxes.
     </div>
   </body>
 </html>
