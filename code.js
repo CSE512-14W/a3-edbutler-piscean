@@ -366,7 +366,7 @@ var a3 = function() {
             list.exit().remove();
             list.html(function(d) { return '<a target="blank" href="' + d.url + '">' + d.text + '</a>'; })
 
-            var text = _.size(to_show) > 0 ? "Number of Songs: " + _.size(to_show) : "No songs found matching the search criteria.";
+            var text = _.size(to_show) > 0 ? "Number of Songs: " + _.size(to_show) : "No songs matching search criteria.";
             $('#song-count').text(text);
         }
 

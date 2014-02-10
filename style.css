@@ -9,12 +9,49 @@ p, h1, h2, h3, h4, h5, h6, span, label, input, button, li {
 	color: #333;
 }
 
+h1 {
+    text-align: center;
+    padding: 20px 0 30px 0;
+}
+
+#instructions p, #description p {
+    padding: 0 0 10px 0;
+}
+
+#instructions span {
+    font-weight: bold;
+}
+
+input {
+    margin: 0 10px 10px 0;
+    padding: 3px;
+    font-size: 110%;
+    font-family: monospace;
+}
+
+#instructions {
+    padding-left: 40px;
+}
+
 svg {
     float: left;
 }
 
+#description {
+    clear: both;
+    padding-top: 20px;
+    width: 500px;
+    margin: 0 auto;
+}
+
 #controls {
     overflow: auto;
+}
+
+#song-count {
+    font-weight: bold;
+    font-size: 110%;
+    padding: 10px 0 5px 20px;
 }
 
 svg text {
@@ -30,7 +67,7 @@ svg text {
 
 #song-list-div {
     padding: 5px;
-    border: 1px solid black;
+    border: 1px solid #aaa;
     overflow-y: auto;
     height: 600px;
 }
