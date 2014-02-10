@@ -9,6 +9,11 @@ p, h1, h2, h3, h4, h5, h6, span, label, input, button, li {
 	color: #333;
 }
 
+body {
+    width: 1200px;
+    margin: 0 auto;
+}
+
 h1 {
     text-align: center;
     padding: 20px 0 30px 0;
@@ -39,9 +44,16 @@ svg {
 
 #description {
     clear: both;
-    padding-top: 20px;
+    padding: 20px 0 50px 0;
+    text-align: center;
+}
+
+.col {
+    display: inline-block;
+    vertical-align: top;
+    padding: 0 10px;
     width: 500px;
-    margin: 0 auto;
+    text-align: left;
 }
 
 #controls {
@@ -69,6 +81,6 @@ svg text {
     padding: 5px;
     border: 1px solid #aaa;
     overflow-y: auto;
-    height: 600px;
+    height: 550px;
 }
 
