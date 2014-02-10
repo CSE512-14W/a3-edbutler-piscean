@@ -40,9 +40,9 @@ Here's a static visualization of the full dataset. We arrange the hues for each 
 Development Process, Differences Between Storyboard and Final
 ------------
 
-We failed to think about some edge cases when storyboarding. For example, what happens when the search query is empty? Chord diagrams do not have a natural "no data" state, so we hide the visuzliation completely when there are no results.
+We failed to think about some edge cases when storyboarding. For example, what happens when the search query is empty? Chord diagrams do not have a natural "no data" state, so we hide the visualiation completely when there are no results.
 
-Work was split on a fine-grained task basis, though very broadly, Eric handled most of the web code and Rahul transforming data from the xml file were given into a cleaned json format for our application. We spent approximately 30 hours of work between the two of us. The most challenging aspsects were probably transforming the data correctly and making animations and transisions for the chord diagram smooth. Since naive interpolation of the elements in a chord diagram looks awful and do not make sense, we had to roll a custom animation system, which took a few iterations to get correct.
+Work was split on a fine-grained task basis. Broadly, Eric handled most of the web code and Rahul transformed data from the xml file we were given into a cleaned json format for our application. We spent approximately 30 hours of work between the two of us. The most challenging aspsects were probably transforming the data correctly and making animations and transitions for the chord diagram smooth. Since naive interpolation of the elements in a chord diagram looks awful and does not make sense, we had to roll a custom animation system, which took a few iterations to get correct.
 
 The dataset turned out not to have genre information. We attempted to gather an external dataset to match up the songs with genre information, but this proved too difficult in the time period allotted. While we feel the visualization is weakened significantly without the ability to do genre search, this is something that can be added easily when the dataset improves.
 
