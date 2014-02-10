@@ -1,7 +1,12 @@
 a3-edbutler-piscean
 ===================
 
-Description and Storyboard
+Brief Description
+-----------
+
+Our site visualizes aggregate data of chord progression in songs, showing the relative fequencies of various chord transitions for a set of songs. The interface allows the user to filter by chord subsequence, artist, and title. It provides links to visualizations of the chord progressions of individual songs, as well as interactions for looking at the individual data points by hovering over elements of the visuzliation.
+
+Part 1 Plan and Storyboard
 ----------
 
 We chose to create a vizualization to explore chord progressions in songs. Which kinds of progressions are common, which songs use certain progressions, what do progression typically look like for certain artists or genres? Though a comprehensive database of chord progressions in popular music does not exist, twe found a webiste whose owners were kind enough to share their database of segments from a couple thousand songs, created by crowdsourced analysis.
@@ -29,3 +34,14 @@ Here's a sketch of the overall interface. Visualization of the current selection
 Here's a static visualization of the full dataset. We arrange the hues for each node in a color circle to emphasize the circular nature of the nodes. Rather than viewing all possible types of chords (e.g., V vs. V7 vs. Vsus4), we collapse all chords to the mode of their root (the numbers 1-7) and remove self-transitions.
 
 <img src="storyboard/test.png" width="400">
+
+Development Process, Differences Between Storyboard and Final
+------------
+
+We failed to think about some edge cases when storyboarding. For example, what happens when the search query is emptpy? Chord diagrams do not have a natural "no data" state, so we hide the visuzliation completely when there are no results.
+
+Work was split on a fine-grained task basis, though very broadly, Eric handled most of the web code and Rahul transforming data from the xml file were given into a cleaned json format for our application. We spent approximately 30 hours of work between the two of us. The most challenging aspsects were probably transforming the data correctly and making animations and transisions for the chord diagram smooth. Since naive interpolate of the elements in a chord diagram look awful and do not make sense to do, we had to roll a custom animation system, which took a few iterations to get correct.
+
+The dataset turned out not to have genre information. We attempted to gather an external dataset to match up the songs with genre information, but this proved too difficult in the time period allotted. While we feel the visualization is weakened significantly without the ability to do genre search, this is something that can be added easily when the dataset improves.
+
+Another problem we encountered is that the dataset is rather sparse and covers an odd set of songs, which is expected since it's created by volunteer crowdsourcing. For example, it's a lot of pop songs, with surprising presence of odd things like the Sailor Moon theme song and obscure video game OSTs. This undermines the value of "search by artist" since artists are very rarely well represented. Also because of crowdsourcing, there are several poorly transcribed songs with questionable progressions. However, like the problem with genre, these will go away as the dataset improves with no change to the visualization. This is the best dataset we could find.
