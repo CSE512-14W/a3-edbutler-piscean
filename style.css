@@ -1,0 +1,37 @@
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+p, h1, h2, h3, h4, h5, h6, span, label, input, button, li {
+	font-family: 'Open Sans', sans-serif;
+	color: #333;
+}
+
+svg {
+    float: left;
+}
+
+#controls {
+    overflow: auto;
+}
+
+svg text {
+    font-size: 200%;
+	color: #333;
+}
+
+.chord path {
+    fill-opacity: .66;
+    stroke: black;
+    stroke-width: .5px;
+}
+
+#song-list-div {
+    padding: 5px;
+    border: 1px solid black;
+    overflow-y: auto;
+    height: 600px;
+}
+
